@@ -27,44 +27,47 @@ diamonds <- diamonds %>% rename(
 ## Exercise 1
 
 ```{r}
-# Do some preliminary investigations & cleaning
+diamonds <- diamonds %>% 
+  filter(length_mm != 0 & width_mm != 0 & depth_mm != 0)
 
-
-
-
+diamonds %>% 
+  group_by(color) %>%
+  ggplot(mapping=aes(x=carat,y=price,color=factor(color))) +
+  geom_point()
 ```
-
+(Better colours cost more for the samve carat size)
 
 ## Exercise 2
 
-```{r}
+```{r ex-2}
 
 diamonds <- diamonds %>%
-  mutate(table_mm = table_pct * width_mm / 100)
+  mutate(table_mm = table_pct * width_mm / 100) 
 
 # Overall table_mm arithmetic mean?
 
-
-
-
-
+diamonds %>%
+  summarise(
+    mean = mean(table_mm)
+  )
 
 # table_mm arithmetic mean within each clarity category
-
-
-
-
-
-
+ 
+diamonds %>%
+  group_by(clarity) %>%
+  summarise(
+    mean = mean(table_mm)
+  )
 ```
-
-_Add your comment here_
+Higher clarity corresponds to lower average table length
 
 ```{r}
 # calculate the arithmetic mean across all numeric variables
-
-
-
+diamonds %>%
+  group_by(clarity) %>%
+  summarise(
+    across(where(is.double), list(mean = mean))
+  )
 
 ```
 
